@@ -1,6 +1,9 @@
 package wordlegrid
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 var emojiMap = map[CellType]string{
 	AbsentCellType:  "⬜",
@@ -42,11 +45,15 @@ func (g *Grid) AsEmoji(dark, contrast bool) (string, error) {
 		for x := 0; x < 5; x++ {
 			t := g[y][x].Type
 			if t == EmptyCellType {
-				return "", fmt.Errorf("empty cells are not allowed")
+				if x != 0 {
+					return "", fmt.Errorf("empty cells are not allowed")
+				} else {
+					break
+				}
 			}
 			board += m[t]
 		}
 		board += "\n"
 	}
-	return board, nil
+	return strings.TrimSpace(board), nil
 }
